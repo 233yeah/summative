@@ -1,0 +1,74 @@
+/* CartView.css */
+.cart-view {
+    background-color: #141414; /* Dark background */
+    color: #fff; /* White text */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Clean font */
+    padding: 20px;
+    min-height: 100vh;
+    width: 100%;
+  }
+  
+  .cart-view h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .cart-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Grid layout for responsiveness */
+    gap: 20px;
+  }
+  
+  .cart-item {
+    background-color: #333; /* Dark card background */
+    border-radius: 10px;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .cart-item:hover {
+    transform: scale(1.05); /* Slight hover effect */
+  }
+  
+  .cart-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    object-fit: cover; /* Ensures images cover the space properly */
+  }
+  
+  .cart-item h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+  
+  .remove-button {
+    position: relative;
+    background-color: #e50914; /* Netflix red */
+    color: white;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+    bottom: 10px;
+    left: 45px;
+    transform: translateX(-50%);
+  }
+  
+  .remove-button:hover {
+    background-color: #f40612; /* Slightly darker red on hover */
+  }
+  
+  .remove-button:focus {
+    outline: none;
+  }
+  
+
+  

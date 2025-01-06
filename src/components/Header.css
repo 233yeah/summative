@@ -1,0 +1,40 @@
+.logo {
+    position: relative;
+    left: 7px;
+    text-decoration: underline;
+    font-family: Copperplate, fantasy;
+    font-size: 50px;
+    color: crimson;
+    top: 7px;
+}
+
+/*  the top and bottom bars*/
+.tb-item  {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #000000;
+    position: relative;
+    height: 95px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 10px;
+}
+.buttons {
+    position: absolute;
+    top: 34px;
+    right: 5vw;
+}
+
+button:hover {
+    background-color: #7e1131
+}
+
+button {
+    background-color: #df1854;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    margin-left: 5px;
+}
