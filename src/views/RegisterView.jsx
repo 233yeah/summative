@@ -4,6 +4,8 @@ import Footer from "../components/Footer";
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context';
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../firebase";
 
 function RegisterView() {
     const { setFirstName, setLastName, setEmail, setPassword, setLogin, checked, prefGenre, toggleGenre } = useStoreContext();
@@ -30,19 +32,22 @@ function RegisterView() {
     ];
     const navigate = useNavigate();
 
-    function register(event) {
+    const registerByEmail = async (event) => {
         event.preventDefault();
         if (password.current.value === rePassword && prefGenre.length >= 10) {
-            setFirstName(firstName.current.value);
-            setLastName(lastName.current.value);
-            setEmail(email.current.value);
-            setPassword(password.current.value);
-            setLogin(true);
-            navigate(`/movie/genre/0`);
+            try {
+                const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
+                await updateProfile(user, { displayName: `${firstName} ${lastName}` });
+                setUser(user);
+                navigate('/movies/all');
+            } catch (error) {
+                console.log(error);
+                alert("Error creating user with email and password!");
+            }
         } else {
             alert("make sure the passwords match and you selected at least 10 genres");
         }
-    }
+    };
 
     return (
         <div>
@@ -67,7 +72,7 @@ function RegisterView() {
 
                 <div className="register-container">
                     <h className="register-title">Join Us!</h>
-                    <form className="register-form" onSubmit={(event) => { register(event) }}>
+                    <form className="register-form" onSubmit={(event) => { registerByEmail(event) }}>
                         <label className="register-text">First Name:</label>
                         <input type="text" id="first-name" className="register-inputs" ref={firstName} required />
                         <label className="register-text">Last Name:</label>
