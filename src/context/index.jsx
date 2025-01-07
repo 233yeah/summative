@@ -1,14 +1,14 @@
 import { createContext, useState, useContext } from "react";
 import { Map } from 'immutable';
+import { auth } from "../firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const StoreContext = createContext();
 
 export const StoreProvider = ({ children }) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [user, setUser] = useState(null);
     const [cart, setCart] = useState(Map());
+    const [loading, setLoading] = useState(true);
     const [login, setLogin] = useState(false);
     const [prefGenre, setPrefGenre] = useState([]);
     const genres = [
@@ -83,7 +83,7 @@ export const StoreProvider = ({ children }) => {
     };
 
     return (
-        <StoreContext.Provider value={{ email, setEmail, password, setPassword, firstName, setFirstName, lastName, setLastName, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState }}>
+        <StoreContext.Provider value={{ user, setUser, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState }}>
             {children}
         </StoreContext.Provider>
     );

@@ -8,11 +8,11 @@ import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleA
 import { auth } from "../firebase";
 
 function RegisterView() {
-    const { setFirstName, setLastName, setEmail, setPassword, setLogin, checked, prefGenre, toggleGenre } = useStoreContext();
+    const { setUser, checked, prefGenre, toggleGenre } = useStoreContext();
     const firstName = useRef('');
     const lastName = useRef('');
-    const email = useRef('');
-    const password = useRef('');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [rePassword, setRePassword] = useState("");
     const genres = [
         { id: 28, genre: 'Action' },
@@ -34,12 +34,13 @@ function RegisterView() {
 
     const registerByEmail = async (event) => {
         event.preventDefault();
-        if (password.current.value === rePassword && prefGenre.length >= 10) {
+        console.log(auth);
+        if (password === rePassword && prefGenre.length >= 10) {
             try {
                 const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
                 await updateProfile(user, { displayName: `${firstName} ${lastName}` });
                 setUser(user);
-                navigate('/movies/all');
+                navigate(`/movie/genre/0`);
             } catch (error) {
                 console.log(error);
                 alert("Error creating user with email and password!");
@@ -48,6 +49,16 @@ function RegisterView() {
             alert("make sure the passwords match and you selected at least 10 genres");
         }
     };
+
+    const registerByGoogle = async () => {
+        try {
+            const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+            setUser(user);
+            navigate('/movies/all');
+        } catch {
+            alert("Error creating user with email and password!");
+        }
+    }
 
     return (
         <div>
@@ -78,13 +89,14 @@ function RegisterView() {
                         <label className="register-text">Last Name:</label>
                         <input type="text" id="last-name" className="register-inputs" ref={lastName} required />
                         <label className="register-text">Email:</label>
-                        <input type="email" id="email" className="register-inputs" ref={email} required />
+                        <input type="email" id="email" className="register-inputs" value={email} onChange={(e) => setEmail(e.target.value)} required />
                         <label className="register-text">Password:</label>
-                        <input type="password" id="email" className="register-inputs" ref={password} required />
+                        <input type="password" id="password" className="register-inputs" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <label className="register-text">Re-Enter Password:</label>
                         <input type="password" className="register-inputs" value={rePassword} onChange={(event) => { setRePassword(event.target.value) }} required />
                         <button className="register-button">Sign Up</button>
                     </form>
+                    <button className="register-button" onClick={()=>registerByGoogle()}>Sign Up With Google</button>
                 </div>
             </div>
             <Footer />
