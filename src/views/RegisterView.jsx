@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleA
 import { auth } from "../firebase";
 
 function RegisterView() {
-    const { setUser, checked, prefGenre, toggleGenre } = useStoreContext();
+    const { setLogin,setUser, checked, prefGenre, toggleGenre } = useStoreContext();
     const firstName = useRef('');
     const lastName = useRef('');
     const [email, setEmail] = useState("");
@@ -40,6 +40,7 @@ function RegisterView() {
                 const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
                 await updateProfile(user, { displayName: `${firstName} ${lastName}` });
                 setUser(user);
+                setLogin(true);
                 navigate(`/movie/genre/0`);
             } catch (error) {
                 console.log(error);
@@ -51,58 +52,64 @@ function RegisterView() {
     };
 
     const registerByGoogle = async () => {
-        try {
-            const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
-            setUser(user);
-            navigate('/movies/all');
-        } catch {
-            alert("Error creating user with email and password!");
+        if (password === rePassword && prefGenre.length >= 10) {
+
+            try {
+                const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+                setUser(user);
+                setLogin(true);
+                navigate(`/movie/genre/0`);
+            } catch {
+                alert("Error creating user with email and password!");
+            }
+        }
+        else {
+            alert("make sure you selected at least 10 genres");
         }
     }
+        return (
+            <div>
+                <Header />
+                <div className="register-flex">
+                    <div className="genre-checklist">
+                        <h className="genre-title">Genres</h>
+                        <p className="genre-paragraph">Please choose at least 10 genres so we can personalize your account</p>
+                        {genres.map((item, i) => (
+                            <div key={i}>
+                                <input
+                                    type="checkbox"
+                                    checked={checked[item.genre]}
+                                    onChange={() => toggleGenre(item)}
+                                    id={`checkbox-${i}`}
+                                />
+                                <label className="genre-name">{item.genre}</label>
+                            </div>
+                        ))}
+                        <p className="genre-count"># of genres selected {prefGenre.length}</p>
+                    </div>
 
-    return (
-        <div>
-            <Header />
-            <div className="register-flex">
-                <div className="genre-checklist">
-                    <h className="genre-title">Genres</h>
-                    <p className="genre-paragraph">Please choose at least 10 genres so we can personalize your account</p>
-                    {genres.map((item, i) => (
-                        <div key={i}>
-                            <input
-                                type="checkbox"
-                                checked={checked[item.genre]}
-                                onChange={() => toggleGenre(item)}
-                                id={`checkbox-${i}`}
-                            />
-                            <label className="genre-name">{item.genre}</label>
-                        </div>
-                    ))}
-                    <p className="genre-count"># of genres selected {prefGenre.length}</p>
+                    <div className="register-container">
+                        <h className="register-title">Join Us!</h>
+                        <form className="register-form" onSubmit={(event) => { registerByEmail(event) }}>
+                            <label className="register-text">First Name:</label>
+                            <input type="text" id="first-name" className="register-inputs" ref={firstName} required />
+                            <label className="register-text">Last Name:</label>
+                            <input type="text" id="last-name" className="register-inputs" ref={lastName} required />
+                            <label className="register-text">Email:</label>
+                            <input type="email" id="email" className="register-inputs" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                            <label className="register-text">Password:</label>
+                            <input type="password" id="password" className="register-inputs" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                            <label className="register-text">Re-Enter Password:</label>
+                            <input type="password" className="register-inputs" value={rePassword} onChange={(event) => { setRePassword(event.target.value) }} required />
+                            <button className="register-button">Sign Up</button>
+                        </form>
+                        <button className="register-button" onClick={() => registerByGoogle()}>Sign Up With Google</button>
+                    </div>
                 </div>
-
-                <div className="register-container">
-                    <h className="register-title">Join Us!</h>
-                    <form className="register-form" onSubmit={(event) => { registerByEmail(event) }}>
-                        <label className="register-text">First Name:</label>
-                        <input type="text" id="first-name" className="register-inputs" ref={firstName} required />
-                        <label className="register-text">Last Name:</label>
-                        <input type="text" id="last-name" className="register-inputs" ref={lastName} required />
-                        <label className="register-text">Email:</label>
-                        <input type="email" id="email" className="register-inputs" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        <label className="register-text">Password:</label>
-                        <input type="password" id="password" className="register-inputs" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                        <label className="register-text">Re-Enter Password:</label>
-                        <input type="password" className="register-inputs" value={rePassword} onChange={(event) => { setRePassword(event.target.value) }} required />
-                        <button className="register-button">Sign Up</button>
-                    </form>
-                    <button className="register-button" onClick={()=>registerByGoogle()}>Sign Up With Google</button>
-                </div>
+                <Footer />
             </div>
-            <Footer />
-        </div>
 
-    )
-}
+        )
+    }
 
-export default RegisterView;
+    export default RegisterView;

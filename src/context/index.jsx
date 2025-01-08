@@ -56,6 +56,7 @@ export const StoreProvider = ({ children }) => {
         Thriller: false,
         Western: false
     });
+    
     const resetState = () => {
         setFirstName("");
         setLastName("");

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
 function SettingsView() {
-    const { password, email, firstName, lastName, checked, toggleGenre, setFirstName, setLastName, prefGenre } = useStoreContext();
+    const { user, checked, toggleGenre, prefGenre } = useStoreContext();
     const genres = [
         { id: 28, genre: 'Action' },
         { id: 12, genre: 'Adventure' },
@@ -61,19 +61,18 @@ function SettingsView() {
                     <button onClick={() => backPage()} className="back-button">Back</button>
                     <h1>Settings</h1>
                     <div className="settings-info">
-                        <form className="settings-form" onSubmit={(event) => { changeName(event) }}>
+            {/*             <form className="settings-form" onSubmit={(event) => { changeName(event) }}>
                             <label className="settings-text">First Name:</label>
                             <input type="text" id="first-name" className="settings-inputs" value={firstName} onChange={(event) => { setFirstName(event.target.value) }} required />
                             <label className="settings-text">Last Name:</label>
                             <input type="text" id="last-name" className="settings-inputs" value={lastName} onChange={(event) => { setLastName(event.target.value) }} required />
                             <button className="settings-button">Change First/Last Name?</button>
-                        </form>
+                        </form> */}
                         <label className="settings-text">Email:</label>
-                        <input type="email" id="email" className="settings-inputs readOnly" value={email} required />
+                        <input type="email" id="email" className="settings-inputs readOnly" value={user.email} required />
                         <label className="settings-text">Password:</label>
-                        <input type="text" id="email" className="settings-inputs readOnly" value={password} required />
+                        <input type="text" id="email" className="settings-inputs readOnly" value={null} required />
                     </div>
-
                 </div>
             </div>
             <Footer />

@@ -15,9 +15,9 @@ function Header() {
     }
 
     function logout() {
+        navigate(`/`);
         setLogin(false);
         resetState();
-        navigate(`/`);
     }
 
     function settingsPage() {

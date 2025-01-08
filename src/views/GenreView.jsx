@@ -28,10 +28,13 @@ function GenreView() {
         53: "Thriller",
         37: "Western",
     };
-
     const genreName = genreNames[id];
-    const { firstName, cart, setCart } = useStoreContext();
+    const { user, firstName, cart, setCart } = useStoreContext();
     const [buttonText, setButtonText] = useState('Buy');
+
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
 
     useEffect(() => {
         if (id === null) return;
