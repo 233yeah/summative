@@ -29,7 +29,7 @@ function GenreView() {
         37: "Western",
     };
     const genreName = genreNames[id];
-    const { user, firstName, cart, setCart } = useStoreContext();
+    const { user, cart, setCart } = useStoreContext();
     const [buttonText, setButtonText] = useState('Buy');
 
     useEffect(() => {
@@ -86,12 +86,18 @@ function GenreView() {
             title: movie.original_title,
             url: movie.poster_path,
         };
-        setCart((prevCart) => prevCart.set(movie.id, movieDetails));
+        setCart((prevCart) => {
+            const cart = prevCart.set(movie.id, movieDetails);
+            localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
+            return cart;
+        })
+
+
     }
 
     return (
         <div className="genre-list-container">
-            <h className="name-title">Hello {firstName}</h>
+            <h className="name-title">Hello {user.displayName}</h>
             <p className="page-title">Page: {page}/{totalPages} Current Genre:{genreName}</p>
             <button className="cart-button" onClick={cartPage}>Cart</button>
             <div className="movie-list">

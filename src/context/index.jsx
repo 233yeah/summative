@@ -1,4 +1,4 @@
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { Map } from 'immutable';
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -56,7 +56,7 @@ export const StoreProvider = ({ children }) => {
         Thriller: false,
         Western: false
     });
-    
+
     const resetState = () => {
         setFirstName("");
         setLastName("");
@@ -82,6 +82,23 @@ export const StoreProvider = ({ children }) => {
         });
         setPrefGenre("");
     };
+
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                setUser(user);
+                const sessionCart = localStorage.getItem(user.uid);
+                if (sessionCart) {
+                    setCart(Map(JSON.parse(sessionCart)));
+                }
+            }
+            setLoading(false);
+        });
+    }, [])
+
+    if (loading) {
+        return <h1>Loading...</h1>
+    }
 
     return (
         <StoreContext.Provider value={{ user, setUser, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState }}>
