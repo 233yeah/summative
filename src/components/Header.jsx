@@ -1,10 +1,13 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+
 
 function Header() {
     const navigate = useNavigate();
-    const { login, setLogin, resetState } = useStoreContext();
+    const { login, setLogin, resetState, setUser } = useStoreContext();
 
     function loginPage() {
         navigate(`/login`);
@@ -15,9 +18,13 @@ function Header() {
     }
 
     function logout() {
-        navigate(`/`);
+        setUser(null);
+        signOut(auth);
+        navigate("/");        
         setLogin(false);
+        localStorage.removeItem(user.uid);
         resetState();
+
     }
 
     function settingsPage() {

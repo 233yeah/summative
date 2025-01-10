@@ -53,13 +53,12 @@ function GenreView() {
         setPage(1);
     }, [id]);
 
-    useEffect(() => {
+ /*    useEffect(() => {
         if (cart.has(id)) {
             setButtonText("Added");
         } else {
-            setButtonText("Buy");
-        }
-    }, [cart, id]);
+    }, [cart, id]); */
+
 
     function nextPage() {
         if (page < totalPages) {
@@ -97,8 +96,8 @@ function GenreView() {
 
     return (
         <div className="genre-list-container">
-            <h className="name-title">Hello {user.displayName}</h>
-            <p className="page-title">Page: {page}/{totalPages} Current Genre:{genreName}</p>
+{/*             <h className="name-title">Hello {user.displayName}</h>
+ */}            <p className="page-title">Page: {page}/{totalPages} Current Genre:{genreName}</p>
             <button className="cart-button" onClick={cartPage}>Cart</button>
             <div className="movie-list">
                 {movies.map((movie) => (

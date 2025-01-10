@@ -91,6 +91,7 @@ export const StoreProvider = ({ children }) => {
                 if (sessionCart) {
                     setCart(Map(JSON.parse(sessionCart)));
                 }
+                setLogin(true);
             }
             setLoading(false);
         });
