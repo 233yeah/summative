@@ -3,6 +3,8 @@ import "./SettingsView.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { updateProfile } from "firebase/auth";
 
 function SettingsView() {
     const { user, checked, toggleGenre, prefGenre } = useStoreContext();
@@ -23,10 +25,14 @@ function SettingsView() {
         { id: 37, genre: 'Western' }
     ];
     const navigate = useNavigate();
-    let nameArray = user.displayName.split(" ");
+    const nameArray = user.displayName.split(" ");
+    const [firstName, setFirstName] = useState(nameArray[0]);
+    const [lastName, setLastName] = useState(nameArray[1]);
+
 
     function changeName(event) {
         event.preventDefault();
+        updateProfile(user, { displayName: `${firstName} ${lastName}` });
         alert("changed!");
     }
 
@@ -64,9 +70,9 @@ function SettingsView() {
                     <div className="settings-info">
                         <form className="settings-form" onSubmit={(event) => { changeName(event) }}>
                             <label className="settings-text">First Name:</label>
-                            <input type="text" id="first-name" className="settings-inputs" value={nameArray[0]} onChange={(event) => { setFirstName(event.target.value) }} required />
+                            <input type="text" id="first-name" className="settings-inputs" value={firstName} onChange={(event) => { setFirstName(event.target.value) }} required></input>
                             <label className="settings-text">Last Name:</label>
-                            <input type="text" id="last-name" className="settings-inputs" value={nameArray[1]} onChange={(event) => { setLastName(event.target.value) }} required />
+                            <input type="text" id="last-name" className="settings-inputs" value={lastName} onChange={(event) => { setLastName(event.target.value) }} required />
                             <button className="settings-button">Change First/Last Name?</button>
                         </form>
                         <label className="settings-text">Email:</label>

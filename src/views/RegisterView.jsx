@@ -1,7 +1,7 @@
 import "./RegisterView.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context';
 import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
