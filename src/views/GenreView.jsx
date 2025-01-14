@@ -30,11 +30,8 @@ function GenreView() {
     };
     const genreName = genreNames[id];
     const { user, cart, setCart } = useStoreContext();
-    const [buttonText, setButtonText] = useState('Buy');
 
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
+    console.log(cart.has("558449"));
 
     useEffect(() => {
         if (id === null) return;
@@ -47,18 +44,11 @@ function GenreView() {
         }
 
         getMovies();
-    }, [id][page]);
+    }, [id, page]);
 
-    useEffect(() => {
-        setPage(1);
-    }, [id]);
-
- /*    useEffect(() => {
-        if (cart.has(id)) {
-            setButtonText("Added");
-        } else {
-    }, [cart, id]); */
-
+    // useEffect(() => {
+    //     setPage(1);
+    // }, [id]);
 
     function nextPage() {
         if (page < totalPages) {
@@ -86,7 +76,7 @@ function GenreView() {
             url: movie.poster_path,
         };
         setCart((prevCart) => {
-            const cart = prevCart.set(movie.id, movieDetails);
+            const cart = prevCart.set(String(movie.id), movieDetails);
             localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
             return cart;
         })
@@ -96,13 +86,13 @@ function GenreView() {
 
     return (
         <div className="genre-list-container">
-{/*             <h className="name-title">Hello {user.displayName}</h>
- */}            <p className="page-title">Page: {page}/{totalPages} Current Genre:{genreName}</p>
+            <h className="name-title">Hello {user.displayName}</h>
+            <p className="page-title">Page: {page}/{totalPages} Current Genre:{genreName}</p>
             <button className="cart-button" onClick={cartPage}>Cart</button>
             <div className="movie-list">
                 {movies.map((movie) => (
-                    <div>
-                        <div key={movie.id} className="movie-item" onClick={() => { loadMovie(movie.id) }}>
+                    <div key={movie.id}>
+                        <div className="movie-item" onClick={() => { loadMovie(movie.id) }}>
                             <img
                                 src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                                 alt={movie.title}
@@ -110,7 +100,7 @@ function GenreView() {
                             />
                             <h className="movie-title">{movie.title}</h>
                         </div>
-                        <button className="buy-button" onClick={() => addToCart(movie)}> {cart.has(movie.id) ? "Added" : "Buy"} </button>
+                        <button className="buy-button" onClick={() => addToCart(movie)}> {cart.has(String(movie.id)) ? "Added" : "Buy"} </button>
                     </div>
                 ))}
             </div>

@@ -5,11 +5,16 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 
 function CartView() {
-  const { cart, setCart } = useStoreContext();
+  const { cart, setCart, user } = useStoreContext();
   const navigate = useNavigate();
 
   function backPage() {
     navigate(`/movie/genre/0`);
+  }
+
+  function removeMovie(key) {
+    localStorage.removeItem(user.uid)
+    setCart((prevCart) => prevCart.delete(key))
   }
 
   return (
@@ -25,7 +30,7 @@ function CartView() {
                 <div className="cart-item" key={key}>
                   <img src={`https://image.tmdb.org/t/p/w500${value.url}`} />
                   <h1>{value.title}</h1>
-                  <button className="remove-button" onClick={() => setCart((prevCart) => prevCart.delete(key))}>Remove</button>
+                  <button className="remove-button" onClick={() => removeMovie(key)}>Remove</button>
                 </div>
               )
             })
