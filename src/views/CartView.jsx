@@ -3,6 +3,8 @@ import "./CartView.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function CartView() {
   const { cart, setCart, user } = useStoreContext();
@@ -13,16 +15,32 @@ function CartView() {
   }
 
   function removeMovie(key) {
-    localStorage.removeItem(user.uid)
-    setCart((prevCart) => prevCart.delete(key))
+    setCart((prevCart) => {
+      localStorage.removeItem(user.uid);
+      setCart((prevCart) => prevCart.delete(String(key)));
+      console.log(cart);
+      localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
+    })
+
   }
 
+
+  const checkout = async () => {
+    const docRef = doc(firestore, "users", user.uid);
+    await setDoc(docRef, cart.toJS());
+
+    /* 
+        const docRef = doc(firestore, "users", user.uid);
+       const data = (await getDoc(docRef)).data();
+         const cart = Map(data); */
+  }
   return (
     <div>
       <Header />
       <div className="cart-view">
-        <button onClick={() => backPage()} className="back-button">Back</button>
+        <button onClick={() => backPage()} className="cart-button">Back</button>
         <h1>Shopping Cart</h1>
+        <button onClick={() => checkout()} className="cart-button">Checkout</button>
         <div className="cart-items">
           {
             cart.entrySeq().reverse().map(([key, value]) => {

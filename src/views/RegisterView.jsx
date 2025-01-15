@@ -34,7 +34,6 @@ function RegisterView() {
 
     const registerByEmail = async (event) => {
         event.preventDefault();
-        console.log(auth);
         if (password === rePassword && prefGenre.length >= 10) {
             try {
                 const user = (await createUserWithEmailAndPassword(auth, email, password)).user;

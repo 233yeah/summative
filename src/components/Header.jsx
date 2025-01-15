@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 
 function Header() {
     const navigate = useNavigate();
-    const { login, setLogin, resetState, setUser } = useStoreContext();
+    const { login, setLogin, resetState, setUser, user } = useStoreContext();
 
     function loginPage() {
         navigate(`/login`);
@@ -20,9 +20,8 @@ function Header() {
     function logout() {
         setUser(null);
         signOut(auth);
-        navigate("/");        
+        navigate("/");
         setLogin(false);
-        localStorage.removeItem(user.uid);
         resetState();
 
     }
