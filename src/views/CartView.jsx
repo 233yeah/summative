@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
+import { Map } from 'immutable';
 
 function CartView() {
   const { cart, setCart, user } = useStoreContext();
@@ -15,20 +16,22 @@ function CartView() {
   }
 
   function removeMovie(key) {
+
+    localStorage.removeItem(user.uid);
     setCart((prevCart) => {
-      localStorage.removeItem(user.uid);
-      setCart((prevCart) => prevCart.delete(String(key)));
-      console.log(cart);
-      localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
-    })
-
+      const newCart = prevCart.delete((key));
+      localStorage.setItem(user.uid, JSON.stringify(newCart.toJS()));
+      return newCart;
+    });
   }
-
+  console.log(user);
 
   const checkout = async () => {
     const docRef = doc(firestore, "users", user.uid);
     await setDoc(docRef, cart.toJS());
-
+    localStorage.removeItem(user.uid);
+    setCart(Map());
+    alert("Thank You for the Purchase!")
     /* 
         const docRef = doc(firestore, "users", user.uid);
        const data = (await getDoc(docRef)).data();

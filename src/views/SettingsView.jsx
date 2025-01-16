@@ -28,7 +28,7 @@ function SettingsView() {
     const nameArray = user.displayName.split(" ");
     const [firstName, setFirstName] = useState(nameArray[0]);
     const [lastName, setLastName] = useState(nameArray[1]);
-
+    
 
     function changeName(event) {
         event.preventDefault();

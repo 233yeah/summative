@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./GenreView.css";
 import { useStoreContext } from '../context';
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
+import { Map } from 'immutable';
 
 function GenreView() {
     const [movies, setMovies] = useState([]);
@@ -30,8 +33,7 @@ function GenreView() {
     };
     const genreName = genreNames[id];
     const { user, cart, setCart } = useStoreContext();
-
-    console.log(cart.has("558449"));
+    const [buttonText, setButtonText] = useState("Buy")
 
     useEffect(() => {
         if (id === null) return;
@@ -70,11 +72,20 @@ function GenreView() {
         navigate(`/cart`);
     }
 
-    function addToCart(movie) {
+    const addToCart = async (movie) => {
+        const docRef = doc(firestore, "users", user.uid);
+        const data = (await getDoc(docRef)).data();
+        const boughtCart = (Map(data));
+        console.log(boughtCart);
+        buttonTextCheck(movie.id);
         const movieDetails = {
             title: movie.original_title,
             url: movie.poster_path,
         };
+        if (boughtCart.has(String(movie.id))) {
+            alert("Already Bought Movie!")
+            return
+        }
         setCart((prevCart) => {
             const cart = prevCart.set(String(movie.id), movieDetails);
             localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
@@ -83,7 +94,21 @@ function GenreView() {
 
 
     }
-
+    const buttonTextCheck = async (movie) => {
+        const docRef = doc(firestore, "users", user.uid);
+        const data = (await getDoc(docRef)).data();
+        const boughtCart = (Map(data));
+        console.log(boughtCart);
+        if (boughtCart.has(String(movie.id))) {
+            setButtonText("Purchased")
+        } else if (cart.has(String(movie.id))) {
+            setButtonText("Added")
+        } else {
+            setButtonText("Buy")
+        }
+        console.log(buttonText);
+    }
+  
     return (
         <div className="genre-list-container">
             <h className="name-title">Hello {user.displayName}</h>
@@ -100,7 +125,7 @@ function GenreView() {
                             />
                             <h className="movie-title">{movie.title}</h>
                         </div>
-                        <button className="buy-button" onClick={() => addToCart(movie)}> {cart.has(String(movie.id)) ? "Added" : "Buy"} </button>
+                        <button className="buy-button" onClick={() => addToCart(movie)}> {buttonText} </button>
                     </div>
                 ))}
             </div>
