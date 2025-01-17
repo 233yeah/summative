@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context';
 import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function RegisterView() {
     const { setLogin, setUser, checked, prefGenre, toggleGenre } = useStoreContext();
@@ -41,6 +43,11 @@ function RegisterView() {
                 console.log(user.displayName);
                 setUser(user);
                 setLogin(true);
+                const userGenres = {
+                    genres: prefGenre.map((item) => item),
+                };
+                const docRef = doc(firestore, "users", user.email);
+                await setDoc(docRef, userGenres, { merge: true });
                 navigate(`/movie/genre/0`);
             } catch (error) {
                 console.log(error);
@@ -58,6 +65,11 @@ function RegisterView() {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
                 setUser(user);
                 setLogin(true);
+                const userGenres = {
+                    genres: prefGenre.map((item) => item),
+                };
+                const docRef = doc(firestore, "users", user.email);
+                await setDoc(docRef, userGenres, { merge: true });
                 navigate(`/movie/genre/0`);
             } catch {
                 alert("Error creating user with email and password!");

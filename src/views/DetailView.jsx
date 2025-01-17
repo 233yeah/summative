@@ -23,13 +23,6 @@ function DetailView() {
         getDetails();
     }, [id]);
 
-    useEffect(() => {
-        if (cart.has(id)) {
-            setButtonText("Added");
-        } else {
-            setButtonText("Buy");
-        }
-    }, [cart, id]);
 
     function cartPage() {
         navigate(`/cart`);
@@ -57,7 +50,6 @@ function DetailView() {
                 )}
             </div>
             <div className="detail-buttons">
-                <button className="buy-button" onClick={() => addToCart(details)}> {cart.has(details.id) ? "Added" : "Buy"} </button>
                 <button className="cart-button" onClick={cartPage}>Cart</button>
             </div>
             {details.poster_path && (

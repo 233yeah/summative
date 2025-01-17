@@ -18,7 +18,6 @@ function Header() {
     }
 
     function logout() {
-        setUser(null);
         signOut(auth);
         navigate("/");
         setLogin(false);

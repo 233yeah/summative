@@ -2,6 +2,8 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { Map } from 'immutable';
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 const StoreContext = createContext();
 
@@ -11,6 +13,7 @@ export const StoreProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [login, setLogin] = useState(false);
     const [prefGenre, setPrefGenre] = useState([]);
+    const [purchases, setPurchases] = useState(Map());
     const genres = [
         { id: 28, genre: 'Action' },
         { id: 12, genre: 'Adventure' },
@@ -58,10 +61,6 @@ export const StoreProvider = ({ children }) => {
     });
 
     const resetState = () => {
-        setFirstName("");
-        setLastName("");
-        setEmail("");
-        setPassword("");
         setCart(Map())
         setChecked({
             Action: false,
@@ -81,6 +80,7 @@ export const StoreProvider = ({ children }) => {
             Western: false
         });
         setPrefGenre("");
+        setUser(null);
     };
 
     useEffect(() => {
@@ -92,17 +92,35 @@ export const StoreProvider = ({ children }) => {
                     setCart(Map(JSON.parse(sessionCart)));
                 }
                 setLogin(true);
+                const getPurchases = async () => {
+                    try {
+                        const docRef = doc(firestore, "users", user.email);
+                        const docSnap = (await getDoc(docRef));
+                        if (docSnap.exists()) {
+                            const data = (await getDoc(docRef)).data();
+                            console.log(data);
+                            setPurchases(Map(data.purchases));
+                        }
+                        console.log(purchases);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                };
+                getPurchases();
             }
+
             setLoading(false);
         });
     }, [])
+
+
 
     if (loading) {
         return <h1>Loading...</h1>
     }
 
     return (
-        <StoreContext.Provider value={{ user, setUser, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState }}>
+        <StoreContext.Provider value={{ user, setUser, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState, purchases, setPurchases }}>
             {children}
         </StoreContext.Provider>
     );

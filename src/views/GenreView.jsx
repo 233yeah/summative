@@ -32,8 +32,9 @@ function GenreView() {
         37: "Western",
     };
     const genreName = genreNames[id];
-    const { user, cart, setCart } = useStoreContext();
-    const [buttonText, setButtonText] = useState("Buy")
+    const { user, cart, setCart, purchases } = useStoreContext();
+
+    console.log(purchases);
 
     useEffect(() => {
         if (id === null) return;
@@ -48,9 +49,9 @@ function GenreView() {
         getMovies();
     }, [id, page]);
 
-    // useEffect(() => {
-    //     setPage(1);
-    // }, [id]);
+    useEffect(() => {
+        setPage(1);
+    }, [id]);
 
     function nextPage() {
         if (page < totalPages) {
@@ -73,11 +74,10 @@ function GenreView() {
     }
 
     const addToCart = async (movie) => {
-        const docRef = doc(firestore, "users", user.uid);
+        const docRef = doc(firestore, "users", user.email);
         const data = (await getDoc(docRef)).data();
-        const boughtCart = (Map(data));
+        const boughtCart = (Map(data.purchases));
         console.log(boughtCart);
-        buttonTextCheck(movie.id);
         const movieDetails = {
             title: movie.original_title,
             url: movie.poster_path,
@@ -94,21 +94,16 @@ function GenreView() {
 
 
     }
-    const buttonTextCheck = async (movie) => {
-        const docRef = doc(firestore, "users", user.uid);
-        const data = (await getDoc(docRef)).data();
-        const boughtCart = (Map(data));
-        console.log(boughtCart);
-        if (boughtCart.has(String(movie.id))) {
-            setButtonText("Purchased")
-        } else if (cart.has(String(movie.id))) {
-            setButtonText("Added")
+    function getButtonText(movie) {
+        if (purchases.has(String(movie))) {
+            return "Purchased";
+        }else if (cart.has(String(movie))) {
+            return "Added";
         } else {
-            setButtonText("Buy")
-        }
-        console.log(buttonText);
+            return "Buy";
+        };
     }
-  
+
     return (
         <div className="genre-list-container">
             <h className="name-title">Hello {user.displayName}</h>
@@ -125,7 +120,7 @@ function GenreView() {
                             />
                             <h className="movie-title">{movie.title}</h>
                         </div>
-                        <button className="buy-button" onClick={() => addToCart(movie)}> {buttonText} </button>
+                        <button className="buy-button" onClick={() => addToCart(movie)}> {getButtonText(movie.id)} </button>
                     </div>
                 ))}
             </div>

@@ -27,8 +27,9 @@ function CartView() {
   console.log(user);
 
   const checkout = async () => {
-    const docRef = doc(firestore, "users", user.uid);
-    await setDoc(docRef, cart.toJS());
+    const docRef = doc(firestore, "users", user.email);
+    const userData = { purchases: cart.toJS(), };
+    await setDoc(docRef, userData, { merge: true });
     localStorage.removeItem(user.uid);
     setCart(Map());
     alert("Thank You for the Purchase!")
