@@ -3,12 +3,12 @@ import "./CartView.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
 import { Map } from 'immutable';
 
 function CartView() {
-  const { cart, setCart, user } = useStoreContext();
+  const { cart, setCart, user, setPurchases } = useStoreContext();
   const navigate = useNavigate();
 
   function backPage() {
@@ -31,6 +31,16 @@ function CartView() {
     await setDoc(docRef, userData, { merge: true });
     localStorage.removeItem(user.uid);
     setCart(Map());
+    const getPurchases = async () => {
+
+      const docRef = doc(firestore, "users", user.email);
+      const data = (await getDoc(docRef)).data();
+      setPurchases(Map(data.purchases));
+
+    }
+
+
+    getPurchases();
     alert("Thank You for the Purchase!")
     /* 
         const docRef = doc(firestore, "users", user.uid);
