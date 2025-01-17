@@ -33,14 +33,13 @@ function SettingsView() {
     const [lastName, setLastName] = useState(nameArray[1]);
     const [password, setPassword] = useState("");
 
-
     function changeName(event) {
         event.preventDefault();
         updateProfile(user, { displayName: `${firstName} ${lastName}` });
         alert("changed!");
     }
 
-    const backPage = async (event) =>{
+    const backPage = async () =>{
         if (prefGenre.length >= 10) {
             const docRef = doc(firestore, "users", user.email);
             const userData = { genres: prefGenre };
@@ -56,7 +55,6 @@ function SettingsView() {
             await updatePassword(user, newPassword);
             alert("Password updated successfully!");
         } catch (error) {
-            console.error(error);
             alert("There was an error updating your password.");
         }
     };

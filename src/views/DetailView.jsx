@@ -2,17 +2,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import "./DetailView.css";
-import { useStoreContext } from "../context";
 
 function DetailView() {
     const { id } = useParams();
     const [details, setDetails] = useState([]);
-    const { setCart } = useStoreContext();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (id === null) return;
-
         async function getDetails() {
             const response = await axios.get(
                 `https://api.themoviedb.org/3/movie/${id}?api_key=${import.meta.env.VITE_TMDB_KEY}&append_to_response=videos`
