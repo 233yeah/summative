@@ -56,7 +56,6 @@ function RegisterView() {
 
     const registerByGoogle = async () => {
         if (password === rePassword && prefGenre.length >= 10) {
-
             try {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
                 setUser(user);
@@ -68,11 +67,11 @@ function RegisterView() {
             } catch {
                 alert("Error creating user with email and password!");
             }
-        }
-        else {
+        } else {
             alert("make sure you selected at least 10 genres");
         }
     }
+    
     return (
         <div>
             <Header />
@@ -93,7 +92,6 @@ function RegisterView() {
                     ))}
                     <p className="genre-count"># of genres selected {prefGenre.length}</p>
                 </div>
-
                 <div className="register-container">
                     <h className="register-title">Join Us!</h>
                     <form className="register-form" onSubmit={(event) => { registerByEmail(event) }}>

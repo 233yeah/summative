@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 
 function Header() {
     const navigate = useNavigate();
-    const { login, setLogin, resetState, setUser, user } = useStoreContext();
+    const { login, setLogin, resetState } = useStoreContext();
 
     function loginPage() {
         navigate(`/login`);

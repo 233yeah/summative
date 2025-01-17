@@ -29,19 +29,7 @@ export const StoreProvider = ({ children }) => {
         { id: 10752, genre: 'War' },
         { id: 53, genre: 'Thriller' },
         { id: 37, genre: 'Western' }
-    ];
-    const toggleGenre = (genre) => {
-        setChecked((prev) => {
-            const updatedChecked = { ...prev, [genre.genre]: !prev[genre.genre] };
-            const updatedPrefGenre = Object.keys(updatedChecked)
-                .filter((genreKey) => updatedChecked[genreKey])
-                .map((genreKey) => genres.find((g) => g.genre === genreKey));
-
-            setPrefGenre(updatedPrefGenre);
-
-            return updatedChecked;
-        });
-    };
+    ];    
     const [checked, setChecked] = useState({
         Action: false,
         Adventure: false,
@@ -59,6 +47,19 @@ export const StoreProvider = ({ children }) => {
         Thriller: false,
         Western: false
     });
+
+    const toggleGenre = (genre) => {
+        setChecked((prev) => {
+            const updatedChecked = { ...prev, [genre.genre]: !prev[genre.genre] };
+            const updatedPrefGenre = Object.keys(updatedChecked)
+                .filter((genreKey) => updatedChecked[genreKey])
+                .map((genreKey) => genres.find((g) => g.genre === genreKey));
+
+            setPrefGenre(updatedPrefGenre);
+
+            return updatedChecked;
+        });
+    };
 
     const resetState = () => {
         setCart(Map())
@@ -108,15 +109,11 @@ export const StoreProvider = ({ children }) => {
                     }
                 };
                 getGenresandPurchases();
-            
             }
-
             setLoading(false);
         });
     }, [])
-
-
-
+    
     if (loading) {
         return <h1>Loading...</h1>
     }

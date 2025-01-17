@@ -16,7 +16,6 @@ function CartView() {
   }
 
   function removeMovie(key) {
-
     localStorage.removeItem(user.uid);
     setCart((prevCart) => {
       const newCart = prevCart.delete((key));
@@ -33,11 +32,9 @@ function CartView() {
       localStorage.removeItem(user.uid);
       setCart(Map());
       const getPurchases = async () => {
-
         const docRef = doc(firestore, "users", user.email);
         const data = (await getDoc(docRef)).data();
         setPurchases(Map(data.purchases));
-
       }
       getPurchases();
       alert("Thank You for the Purchase!")

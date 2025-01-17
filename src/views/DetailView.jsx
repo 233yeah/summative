@@ -7,9 +7,8 @@ import { useStoreContext } from "../context";
 function DetailView() {
     const { id } = useParams();
     const [details, setDetails] = useState([]);
-    const { cart, setCart } = useStoreContext();
+    const { setCart } = useStoreContext();
     const navigate = useNavigate();
-    const [buttonText, setButtonText] = useState('Buy');
 
     useEffect(() => {
         if (id === null) return;
@@ -26,14 +25,6 @@ function DetailView() {
 
     function cartPage() {
         navigate(`/cart`);
-    }
-
-    function addToCart(movie) {
-        const movieDetails = {
-            title: movie.original_title,
-            url: movie.poster_path,
-        };
-        setCart((prevCart) => prevCart.set(movie.id, movieDetails));
     }
 
     return (

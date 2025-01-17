@@ -43,7 +43,6 @@ function GenreView() {
             setMovies(response.data.results);
             setTotalPages(response.data.total_pages);
         }
-
         getMovies();
     }, [id, page]);
 
@@ -88,13 +87,12 @@ function GenreView() {
             localStorage.setItem(user.uid, JSON.stringify(cart.toJS()));
             return cart;
         })
-
-
     }
+    
     function getButtonText(movie) {
         if (purchases.has(String(movie))) {
             return "Purchased";
-        }else if (cart.has(String(movie))) {
+        } else if (cart.has(String(movie))) {
             return "Added";
         } else {
             return "Buy";
