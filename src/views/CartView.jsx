@@ -26,26 +26,25 @@ function CartView() {
   }
 
   const checkout = async () => {
-    const docRef = doc(firestore, "users", user.email);
-    const userData = { purchases: cart.toJS(), };
-    await setDoc(docRef, userData, { merge: true });
-    localStorage.removeItem(user.uid);
-    setCart(Map());
-    const getPurchases = async () => {
-
+    if (cart.size > 0) {
       const docRef = doc(firestore, "users", user.email);
-      const data = (await getDoc(docRef)).data();
-      setPurchases(Map(data.purchases));
+      const userData = { purchases: cart.toJS(), };
+      await setDoc(docRef, userData, { merge: true });
+      localStorage.removeItem(user.uid);
+      setCart(Map());
+      const getPurchases = async () => {
 
+        const docRef = doc(firestore, "users", user.email);
+        const data = (await getDoc(docRef)).data();
+        setPurchases(Map(data.purchases));
+
+      }
+      getPurchases();
+      alert("Thank You for the Purchase!")
+    } else {
+      alert("Please Add Movies First")
     }
 
-
-    getPurchases();
-    alert("Thank You for the Purchase!")
-    /* 
-        const docRef = doc(firestore, "users", user.uid);
-       const data = (await getDoc(docRef)).data();
-         const cart = Map(data); */
   }
   return (
     <div>

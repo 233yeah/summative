@@ -127,3 +127,17 @@ h2 {
     background-color: #000000;
     padding: 5px;
 }
+.buy-button{
+    top: 10px;
+    position: relative;
+    background-color: #e70a0a;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    transition: background-color 0.3s ease;
+    margin-bottom: 25px;
+}

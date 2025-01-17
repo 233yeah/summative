@@ -33,7 +33,6 @@ function GenreView() {
     };
     const genreName = genreNames[id];
     const { user, cart, setCart, purchases } = useStoreContext();
-    console.log(purchases);
 
     useEffect(() => {
         if (id === null) return;
