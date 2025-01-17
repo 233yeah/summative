@@ -40,7 +40,6 @@ function RegisterView() {
             try {
                 const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
                 await updateProfile(user, { displayName: `${firstName} ${lastName}` });
-                console.log(user.displayName);
                 setUser(user);
                 setLogin(true);
                 const docRef = doc(firestore, "users", user.email);
@@ -48,7 +47,6 @@ function RegisterView() {
                 await setDoc(docRef, userData);
                 navigate(`/movie/genre/0`);
             } catch (error) {
-                console.log(error);
                 alert("Error creating user with email and password!");
             }
         } else {
@@ -63,6 +61,9 @@ function RegisterView() {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
                 setUser(user);
                 setLogin(true);
+                const docRef = doc(firestore, "users", user.email);
+                const userData = { genres: prefGenre };
+                await setDoc(docRef, userData);
                 navigate(`/movie/genre/0`);
             } catch {
                 alert("Error creating user with email and password!");
@@ -106,9 +107,9 @@ function RegisterView() {
                         <input type="password" id="password" className="register-inputs" value={password} onChange={(e) => setPassword(e.target.value)} required />
                         <label className="register-text">Re-Enter Password:</label>
                         <input type="password" className="register-inputs" value={rePassword} onChange={(event) => { setRePassword(event.target.value) }} required />
-                        <button className="register-button">Sign Up</button>
+                        <button className="register-button sign-up">Sign Up</button>
                     </form>
-                    <button className="register-button" onClick={() => registerByGoogle()}>Sign Up With Google</button>
+                    <button className="register-button google" onClick={() => registerByGoogle()}>Sign Up With Google</button>
                 </div>
             </div>
             <Footer />

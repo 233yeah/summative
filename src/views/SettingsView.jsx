@@ -5,6 +5,8 @@ import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { updateProfile, updatePassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function SettingsView() {
     const { user, checked, toggleGenre, prefGenre } = useStoreContext();
@@ -38,8 +40,11 @@ function SettingsView() {
         alert("changed!");
     }
 
-    function backPage() {
+    const backPage = async (event) =>{
         if (prefGenre.length >= 10) {
+            const docRef = doc(firestore, "users", user.email);
+            const userData = { genres: prefGenre };
+            await setDoc(docRef, userData);
             navigate(`/movie/genre/0`);
         } else {
             alert("make sure you selected at least 10 genres");
@@ -78,7 +83,7 @@ function SettingsView() {
                                 onChange={() => toggleGenre(item)}
                                 id={`checkbox-${i}`}
                             />
-                            <label className="genre-name">{item.genre}</label>
+                            <label className="genre-name" htmlFor={`checkbox-${i}`}>{item.genre}</label>
                         </div>
                     ))}
                     <p className="genre-count"># of genres selected {prefGenre.length}</p>

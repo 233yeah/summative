@@ -93,32 +93,22 @@ export const StoreProvider = ({ children }) => {
                     setCart(Map(JSON.parse(sessionCart)));
                 }
                 setLogin(true);
-                const getPurchases = async () => {
+                const getGenresandPurchases = async () => {
                     try {
                         const docRef = doc(firestore, "users", user.email);
                         const docSnap = (await getDoc(docRef));
                         if (docSnap.exists()) {
                             const data = (await getDoc(docRef)).data();
                             setPurchases(Map(data.purchases));
+                            setPrefGenre(data.genres);
                         } else {
                             setPurchases(Map());
                           }
                     } catch (error) {
                     }
                 };
-                getPurchases();
-                const getGenres = async () => {
-                    try {
-                        const docRef = doc(firestore, "users", user.email);
-                        const docSnap = await getDoc(docRef);
-                        if (docSnap.exists()) {
-                            const data = (await getDoc(docRef)).data();
-                            setPrefGenre(data.genres);
-                        }
-                    } catch (error) {
-                    }
-                };
-                getGenres();
+                getGenresandPurchases();
+            
             }
 
             setLoading(false);

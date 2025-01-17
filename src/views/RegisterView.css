@@ -71,13 +71,13 @@
 }
 
 .register-button {
+    position: relative;
     font-size: 1.2rem;
     background-color: #e70a0a;
     color: white;
     border: none;
     border-radius: 4px;
-    margin-left: 180px;
-
+    margin-left: 0px;
 }
 
 .genre-checkbox {
@@ -109,4 +109,9 @@
     font-size: 1.2rem;
     margin-top: 15px;
     font-family: 'Roboto', sans-serif;
+}
+.google{
+    position: relative;
+    margin-left: 472px;
+    bottom: 40px
 }

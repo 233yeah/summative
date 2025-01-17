@@ -35,6 +35,9 @@ function LoginView() {
     async function loginByGoogle() {
         try {
             const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+            const docRef = doc(firestore, "users", user.email);
+            const data = (await getDoc(docRef)).data();
+            setPrefGenre(data.genres);
             navigate(`/movie/genre/0`);
             setUser(user);
         } catch (error) {
@@ -52,9 +55,9 @@ function LoginView() {
                     <input type="email" className="login-inputs" value={email} onChange={(event) => { setEmail(event.target.value) }} required />
                     <label className="login-text">Password:</label>
                     <input type="password" className="login-inputs" value={password} onChange={(event) => { setPassword(event.target.value) }} required />
-                    <button className="login-button" type="submit">Sign In</button>
+                    <button className="login-button sign-in" type="submit">Sign In</button>
                 </form>
-                <button className="login-button" onClick={() => loginByGoogle()}>Sign In With Google</button>
+                <button className="login-button google-login" onClick={() => loginByGoogle()}>Sign In With Google</button>
 
             </div>
             <Footer />
