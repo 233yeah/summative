@@ -43,11 +43,9 @@ function RegisterView() {
                 console.log(user.displayName);
                 setUser(user);
                 setLogin(true);
-                const userGenres = {
-                    genres: prefGenre.map((item) => item),
-                };
                 const docRef = doc(firestore, "users", user.email);
-                await setDoc(docRef, userGenres, { merge: true });
+                const userData = { genres: prefGenre };
+                await setDoc(docRef, userData);
                 navigate(`/movie/genre/0`);
             } catch (error) {
                 console.log(error);
@@ -65,11 +63,6 @@ function RegisterView() {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
                 setUser(user);
                 setLogin(true);
-                const userGenres = {
-                    genres: prefGenre.map((item) => item),
-                };
-                const docRef = doc(firestore, "users", user.email);
-                await setDoc(docRef, userGenres, { merge: true });
                 navigate(`/movie/genre/0`);
             } catch {
                 alert("Error creating user with email and password!");

@@ -34,7 +34,6 @@ function GenreView() {
     const genreName = genreNames[id];
     const { user, cart, setCart, purchases } = useStoreContext();
 
-    console.log(purchases);
 
     useEffect(() => {
         if (id === null) return;
@@ -77,7 +76,6 @@ function GenreView() {
         const docRef = doc(firestore, "users", user.email);
         const data = (await getDoc(docRef)).data();
         const boughtCart = (Map(data.purchases));
-        console.log(boughtCart);
         const movieDetails = {
             title: movie.original_title,
             url: movie.poster_path,

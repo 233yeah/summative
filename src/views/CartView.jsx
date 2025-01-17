@@ -24,7 +24,6 @@ function CartView() {
       return newCart;
     });
   }
-  console.log(user);
 
   const checkout = async () => {
     const docRef = doc(firestore, "users", user.email);

@@ -47,19 +47,14 @@ function SettingsView() {
     }
 
     const changePass = async (newPassword) => {
-
-
-        if (user) {
-            try {
-                await updatePassword(user, newPassword);
-                console.log("Password updated successfully!");
-            } catch (error) {
-                console.error("Error updating password:", error);
-                alert("There was an error updating your password.");
-            }
-        } else {
-            alert("User is not authenticated.");
+        try {
+            await updatePassword(user, newPassword);
+            alert("Password updated successfully!");
+        } catch (error) {
+            console.error(error);
+            alert("There was an error updating your password.");
         }
+
     };
 
     useEffect(() => {
@@ -102,8 +97,8 @@ function SettingsView() {
                         <label className="settings-text">Email:</label>
                         <input type="email" id="email" className="settings-inputs" readOnly value={user.email} required />
                         <label className="settings-text">Password:</label>
-                        <input type="text" id="text" className="settings-inputs" readOnly={isReadOnly} value={user.password} required />
-                        {!isReadOnly && (<button className="settings-button" onClick={() => { changePass(user) }}>Change Password?</button>)}
+                        <input type="text" id="text" className="settings-inputs" readOnly={isReadOnly} value={user.password} onChange={(event) => { setPassword(event.target.value) }} required />
+                        {!isReadOnly && (<button className="settings-button" onClick={() => { changePass(password) }}>Change Password?</button>)}
                     </div>
                 </div>
             </div>

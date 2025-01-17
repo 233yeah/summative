@@ -6,37 +6,41 @@ import { useNavigate } from "react-router-dom";
 import { useStoreContext } from "../context";
 import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { firestore } from "../firebase";
 
 function LoginView() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const { setUser, setLogin } = useStoreContext();
+    const { setUser, setLogin, setPrefGenre } = useStoreContext();
 
     async function loginByEmail(event) {
         event.preventDefault();
 
         try {
             const user = (await signInWithEmailAndPassword(auth, email, password)).user;
-            navigate(`/movie/genre/0`);
             setUser(user);
             setLogin(true);
-        } catch (error) {
-            console.log(error);
+            const docRef = doc(firestore, "users", user.email);
+            const data = (await getDoc(docRef)).data();
+            setPrefGenre(data.genres);
+            navigate(`/movie/genre/0`);
+        }
+        catch (error) {
             alert("Error signing in!");
         }
     }
 
     async function loginByGoogle() {
         try {
-          const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
-          navigate(`/movie/genre/0`);
-          setUser(user);
+            const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+            navigate(`/movie/genre/0`);
+            setUser(user);
         } catch (error) {
-          console.log(error);
-          alert("Error signing in!");
+            alert("Error signing in!");
         }
-      }
+    }
 
     return (
         <div>
@@ -50,7 +54,7 @@ function LoginView() {
                     <input type="password" className="login-inputs" value={password} onChange={(event) => { setPassword(event.target.value) }} required />
                     <button className="login-button" type="submit">Sign In</button>
                 </form>
-                <button className="login-button" onClick={()=>loginByGoogle()}>Sign In With Google</button>
+                <button className="login-button" onClick={() => loginByGoogle()}>Sign In With Google</button>
 
             </div>
             <Footer />

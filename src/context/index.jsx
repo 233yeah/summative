@@ -98,15 +98,24 @@ export const StoreProvider = ({ children }) => {
                         const docSnap = (await getDoc(docRef));
                         if (docSnap.exists()) {
                             const data = (await getDoc(docRef)).data();
-                            console.log(data);
                             setPurchases(Map(data.purchases));
                         }
-                        console.log(purchases);
                     } catch (error) {
-                        console.log(error);
                     }
                 };
                 getPurchases();
+                const getGenres = async () => {
+                    try {
+                        const docRef = doc(firestore, "users", user.email);
+                        const docSnap = await getDoc(docRef);
+                        if (docSnap.exists()) {
+                            const data = (await getDoc(docRef)).data();
+                            setPrefGenre(data.genres);
+                        }
+                    } catch (error) {
+                    }
+                };
+                getGenres();
             }
 
             setLoading(false);
