@@ -8,6 +8,8 @@ import DetailView from "./views/DetailView";
 import CartView from "../src/views/CartView";
 import SettingsView from "../src/views/SettingsView";
 import { StoreProvider } from "./context";
+import ProtectedRoutes from "./util/ProtectedRoutes";
+import ErrorView from "./views/ErrorView";
 import './App.css'
 
 function App() {
@@ -19,15 +21,18 @@ function App() {
           <Route path="" element={<HomeView />} />
           <Route path="/register" element={<RegisterView />} />
           <Route path="/login" element={<LoginView />} />
-          <Route path="/cart" element={<CartView />} />
-          <Route path="/settings" element={<SettingsView />} />
-          <Route path="/movie" element={<MovieView />}>
-            <Route path="genre/:id" element={<GenreView />} />
-            <Route path="details/:id" element={<DetailView />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/cart" element={<CartView />} />
+            <Route path="/settings" element={<SettingsView />} />
+            <Route path="/movie" element={<MovieView />}>
+              <Route path="genre/:id" element={<GenreView />} />
+              <Route path="details/:id" element={<DetailView />} />
+            </Route>
           </Route>
-        </Routes>
-      </BrowserRouter>
-    </StoreProvider>
+          <Route path="*" element={<ErrorView />} />
+      </Routes>
+    </BrowserRouter>
+    </StoreProvider >
 
   )
 }

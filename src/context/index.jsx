@@ -81,6 +81,7 @@ export const StoreProvider = ({ children }) => {
         });
         setPrefGenre("");
         setUser(null);
+        setPurchases(Map());
     };
 
     useEffect(() => {
@@ -99,7 +100,9 @@ export const StoreProvider = ({ children }) => {
                         if (docSnap.exists()) {
                             const data = (await getDoc(docRef)).data();
                             setPurchases(Map(data.purchases));
-                        }
+                        } else {
+                            setPurchases(Map());
+                          }
                     } catch (error) {
                     }
                 };

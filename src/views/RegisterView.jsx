@@ -87,7 +87,7 @@ function RegisterView() {
                                 onChange={() => toggleGenre(item)}
                                 id={`checkbox-${i}`}
                             />
-                            <label className="genre-name">{item.genre}</label>
+                            <label className="genre-name" htmlFor={`checkbox-${i}`}>{item.genre}</label>
                         </div>
                     ))}
                     <p className="genre-count"># of genres selected {prefGenre.length}</p>
