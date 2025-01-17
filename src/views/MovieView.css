@@ -1,0 +1,6 @@
+.middle-container{
+  display: flex; 
+} 
+.genre {
+    flex-grow: 1; 
+  }

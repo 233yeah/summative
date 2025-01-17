@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fjalla+One&family=Passion+One:wght@400;700;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Fjalla+One&family=Passion+One:wght@400;700;900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+.detail-container{
+    padding: 10px;
+    background-color: #141414;
+    color: white;
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+
+.detail-title {
+    font-family: "Poppins", sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ff0000;
+    margin-bottom: 10px;
+}
+
+/* Tagline Styling */
+.detail-tagline {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #f5f5f5;
+    margin-bottom: 20px;
+}
+
+/* Overview Styling */
+.detail-overview {
+    font-size: 1.2rem;
+    color: #e5e5e5;
+    margin-bottom: 20px;
+    max-width: 800px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Movie Info (Release Date, Runtime) */
+.details-info {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.details-info p {
+    margin: 5px 0;
+}
+
+/* Poster Image Styling */
+.detail-poster {
+    width: 300px;
+    height: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* Trailers Section */
+.trailers-section {
+    width: 100%;
+    margin-top: 40px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+.trailers-section h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #ff0000;
+    margin-bottom: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Grid for Trailers */
+.trailers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Each trailer tile */
+.trailer-tile {
+    background-color: #444;
+    padding: 10px;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+.trailer-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* Thumbnail image for the trailers */
+.trailer-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+/* Title for each trailer */
+.trailer-tile h3 {
+    color: #fff;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .detail-container {
+        padding: 15px;
+    }
+
+    .detail-title {
+        font-size: 1.5rem;
+    }
+
+    .detail-poster {
+        width: 250px;
+    }
+
+    .trailers-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.buy-button {
+    top: 10px;
+    position: relative;
+    background-color: #e70a0a;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    transition: background-color 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.detail-buttons{
+    display: flex;
+}
