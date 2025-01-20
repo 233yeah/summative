@@ -7,7 +7,7 @@ import { auth } from "../firebase";
 
 function Header() {
     const navigate = useNavigate();
-    const { login, setLogin, resetState } = useStoreContext();
+    const { resetState, user } = useStoreContext();
 
     function loginPage() {
         navigate(`/login`);
@@ -20,7 +20,6 @@ function Header() {
     function logout() {
         signOut(auth);
         navigate("/");
-        setLogin(false);
         resetState();
 
     }
@@ -34,7 +33,7 @@ function Header() {
         <div className="tb-item top-bar">
             <h className="logo "> WacFlix </h>
             <div className="buttons">
-                {!login ? (
+                {!user ? (
                     <>
                         <button onClick={registerPage}>Sign Up</button>
                         <button onClick={loginPage}>Sign In</button>

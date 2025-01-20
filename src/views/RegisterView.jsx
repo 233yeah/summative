@@ -10,7 +10,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
 
 function RegisterView() {
-    const { setLogin, setUser, checked, prefGenre, toggleGenre } = useStoreContext();
+    const { setUser, checked, prefGenre, toggleGenre, setChecked } = useStoreContext();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -41,10 +41,9 @@ function RegisterView() {
                 const user = (await createUserWithEmailAndPassword(auth, email, password)).user;
                 await updateProfile(user, { displayName: `${firstName} ${lastName}` });
                 setUser(user);
-                setLogin(true);
                 const docRef = doc(firestore, "users", user.email);
                 const userData = { genres: prefGenre };
-                await setDoc(docRef, userData);
+                await setDoc(docRef, userData, { merge: true });
                 navigate(`/movie/genre/0`);
             } catch (error) {
                 alert("Error creating user with email and password!");
@@ -59,7 +58,6 @@ function RegisterView() {
             try {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
                 setUser(user);
-                setLogin(true);
                 const docRef = doc(firestore, "users", user.email);
                 const userData = { genres: prefGenre };
                 await setDoc(docRef, userData);
@@ -71,7 +69,7 @@ function RegisterView() {
             alert("make sure you selected at least 10 genres");
         }
     }
-    
+
     return (
         <div>
             <Header />
@@ -84,7 +82,7 @@ function RegisterView() {
                             <input
                                 type="checkbox"
                                 checked={checked[item.genre]}
-                                onChange={() => toggleGenre(item)}
+                                onChange={()=>toggleGenre(item.genre)}
                                 id={`checkbox-${i}`}
                             />
                             <label className="genre-name" htmlFor={`checkbox-${i}`}>{item.genre}</label>

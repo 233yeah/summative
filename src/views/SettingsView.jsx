@@ -9,7 +9,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
 
 function SettingsView() {
-    const { user, checked, toggleGenre, prefGenre } = useStoreContext();
+    const { user, checked, toggleGenre, prefGenre, purchases } = useStoreContext();
     const genres = [
         { id: 28, genre: 'Action' },
         { id: 12, genre: 'Adventure' },
@@ -39,12 +39,16 @@ function SettingsView() {
         alert("changed!");
     }
 
-    const backPage = async () =>{
+    function backPage() {
+        navigate(`/movie/genre/0`);
+    }
+
+    const updateGenres = async () => {
         if (prefGenre.length >= 10) {
             const docRef = doc(firestore, "users", user.email);
             const userData = { genres: prefGenre };
-            await setDoc(docRef, userData);
-            navigate(`/movie/genre/0`);
+            await setDoc(docRef, userData, { merge: true });
+            alert("Changed!");
         } else {
             alert("make sure you selected at least 10 genres");
         }
@@ -77,12 +81,13 @@ function SettingsView() {
                             <input
                                 type="checkbox"
                                 checked={checked[item.genre]}
-                                onChange={() => toggleGenre(item)}
+                                onChange={() => toggleGenre(item.genre)}
                                 id={`checkbox-${i}`}
                             />
                             <label className="genre-name" htmlFor={`checkbox-${i}`}>{item.genre}</label>
                         </div>
                     ))}
+                    <button className="settings-button" onClick={() => updateGenres()}>Change Genres?</button>
                     <p className="genre-count"># of genres selected {prefGenre.length}</p>
                 </div>
                 <div className="settings-view">
@@ -98,9 +103,22 @@ function SettingsView() {
                         </form>
                         <label className="settings-text">Email:</label>
                         <input type="email" id="email" className="settings-inputs" readOnly value={user.email} required />
-                        <label className="settings-text">Password:</label>
-                        <input type="text" id="text" className="settings-inputs" readOnly={isReadOnly} value={user.password} onChange={(event) => { setPassword(event.target.value) }} required />
+                        {!isReadOnly && (<label className="settings-text">Password:</label>)}
+                        {!isReadOnly && (<input type="text" id="text" className="settings-inputs" readOnly={isReadOnly} value={user.password} onChange={(event) => { setPassword(event.target.value) }} required />)}
                         {!isReadOnly && (<button className="settings-button" onClick={() => { changePass(password) }}>Change Password?</button>)}
+                        <h1>Previous Purchases:</h1>
+                        <div className="cart-items">
+                            {
+                                purchases.entrySeq().reverse().map(([key, value]) => {
+                                    return (
+                                        <div className="cart-item" key={key}>
+                                            <img src={`https://image.tmdb.org/t/p/w500${value.url}`} />
+                                            <h1>{value.title}</h1>
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
             </div>

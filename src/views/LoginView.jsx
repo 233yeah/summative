@@ -13,19 +13,18 @@ function LoginView() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    const { setUser, setLogin, setPrefGenre } = useStoreContext();
+    const { setUser, setPrefGenre } = useStoreContext();
 
     async function loginByEmail(event) {
         event.preventDefault();
         try {
             const user = (await signInWithEmailAndPassword(auth, email, password)).user;
             setUser(user);
-            setLogin(true);
             const docRef = doc(firestore, "users", user.email);
             const data = (await getDoc(docRef)).data();
             setPrefGenre(data.genres);
             navigate(`/movie/genre/0`);
-        }catch (error) {
+        } catch (error) {
             alert("Error signing in!");
         }
     }

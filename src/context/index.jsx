@@ -11,7 +11,6 @@ export const StoreProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [cart, setCart] = useState(Map());
     const [loading, setLoading] = useState(true);
-    const [login, setLogin] = useState(false);
     const [prefGenre, setPrefGenre] = useState([]);
     const [purchases, setPurchases] = useState(Map());
     const genres = [
@@ -29,7 +28,7 @@ export const StoreProvider = ({ children }) => {
         { id: 10752, genre: 'War' },
         { id: 53, genre: 'Thriller' },
         { id: 37, genre: 'Western' }
-    ];    
+    ];
     const [checked, setChecked] = useState({
         Action: false,
         Adventure: false,
@@ -47,19 +46,20 @@ export const StoreProvider = ({ children }) => {
         Thriller: false,
         Western: false
     });
+    const [refreshGenre, setRefreshGenre] = useState([]);
 
     const toggleGenre = (genre) => {
-        setChecked((prev) => {
-            const updatedChecked = { ...prev, [genre.genre]: !prev[genre.genre] };
+        setChecked((prevChecked) => {
+            const updatedChecked = { ...prevChecked, [genre]: !prevChecked[genre] };
             const updatedPrefGenre = Object.keys(updatedChecked)
                 .filter((genreKey) => updatedChecked[genreKey])
                 .map((genreKey) => genres.find((g) => g.genre === genreKey));
-
             setPrefGenre(updatedPrefGenre);
 
             return updatedChecked;
         });
     };
+
 
     const resetState = () => {
         setCart(Map())
@@ -83,7 +83,20 @@ export const StoreProvider = ({ children }) => {
         setPrefGenre("");
         setUser(null);
         setPurchases(Map());
+        setRefreshGenre("");
     };
+
+    useEffect(() => {
+        if (prefGenre.length > 0) {
+            const genreNames = prefGenre.map((genreObj) => genreObj.genre);
+            genreNames.forEach((genre) => {
+                setChecked((prevChecked) => {
+                    const updatedChecked = { ...prevChecked, [genre]: !prevChecked[genre] };
+                    return updatedChecked;
+                })
+            });
+        }
+    }, [refreshGenre]);
 
     useEffect(() => {
         onAuthStateChanged(auth, user => {
@@ -93,7 +106,6 @@ export const StoreProvider = ({ children }) => {
                 if (sessionCart) {
                     setCart(Map(JSON.parse(sessionCart)));
                 }
-                setLogin(true);
                 const getGenresandPurchases = async () => {
                     try {
                         const docRef = doc(firestore, "users", user.email);
@@ -102,9 +114,10 @@ export const StoreProvider = ({ children }) => {
                             const data = (await getDoc(docRef)).data();
                             setPurchases(Map(data.purchases));
                             setPrefGenre(data.genres);
+                            setRefreshGenre(data.genres);
                         } else {
                             setPurchases(Map());
-                          }
+                        }
                     } catch (error) {
                     }
                 };
@@ -113,13 +126,13 @@ export const StoreProvider = ({ children }) => {
             setLoading(false);
         });
     }, [])
-    
+
     if (loading) {
         return <h1>Loading...</h1>
     }
 
     return (
-        <StoreContext.Provider value={{ user, setUser, cart, setCart, login, setLogin, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState, purchases, setPurchases }}>
+        <StoreContext.Provider value={{ user, setUser, cart, setCart, checked, setChecked, toggleGenre, prefGenre, setPrefGenre, resetState, purchases, setPurchases }}>
             {children}
         </StoreContext.Provider>
     );
