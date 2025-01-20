@@ -44,11 +44,12 @@ function GenreView() {
             setTotalPages(response.data.total_pages);
         }
         getMovies();
-    }, [id, page]);
+        setPage(1);
+    }, [id,page]);
 
     useEffect(() => {
         setPage(1);
-    }, [id]);
+    }, [id]); 
 
     function nextPage() {
         if (page < totalPages) {
