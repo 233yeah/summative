@@ -60,6 +60,7 @@ function RegisterView() {
                 const docRef = doc(firestore, "users", user.email);
                 const docSnap = await getDoc(docRef);
                 if (docSnap.exists()) {
+                    signOut(auth);
                     alert("You Already Registered With Google")
                     return
                 } else {
