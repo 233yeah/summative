@@ -32,11 +32,11 @@ function LoginView() {
     async function loginByGoogle() {
         try {
             const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
+            setUser(user);
             const docRef = doc(firestore, "users", user.email);
             const data = (await getDoc(docRef)).data();
             setPrefGenre(data.genres);
             navigate(`/movie/genre/0`);
-            setUser(user);
         } catch (error) {
             alert("Error signing in!");
         }

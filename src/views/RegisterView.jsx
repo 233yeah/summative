@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context';
 import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { auth } from "../firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
 
 function RegisterView() {
-    const { setUser, checked, prefGenre, toggleGenre, setChecked } = useStoreContext();
+    const { setUser, checked, prefGenre, toggleGenre } = useStoreContext();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -57,11 +57,17 @@ function RegisterView() {
         if (password === rePassword && prefGenre.length >= 10) {
             try {
                 const user = (await signInWithPopup(auth, new GoogleAuthProvider())).user;
-                setUser(user);
                 const docRef = doc(firestore, "users", user.email);
-                const userData = { genres: prefGenre };
-                await setDoc(docRef, userData);
-                navigate(`/movie/genre/0`);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    alert("You Already Registered With Google")
+                    return
+                } else {
+                    const userData = { genres: prefGenre };
+                    await setDoc(docRef, userData, { merge: true });
+                    navigate(`/movie/genre/0`);
+                    setUser(user);
+                }
             } catch {
                 alert("Error creating user with email and password!");
             }
@@ -82,7 +88,7 @@ function RegisterView() {
                             <input
                                 type="checkbox"
                                 checked={checked[item.genre]}
-                                onChange={()=>toggleGenre(item.genre)}
+                                onChange={() => toggleGenre(item.genre)}
                                 id={`checkbox-${i}`}
                             />
                             <label className="genre-name" htmlFor={`checkbox-${i}`}>{item.genre}</label>
