@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStoreContext } from '../context';
-import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup, GoogleAuthProvider,signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase";
